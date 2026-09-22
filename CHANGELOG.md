@@ -9,6 +9,8 @@ e o projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 - `GET /foods` passa a devolver `base_name` e `preparation` em cada resultado,
   preservando os campos existentes.
+- O pipeline passa a extrair preparos seguidos de duração e formas plurais,
+  incluindo as linhas de ovos e almôndegas.
 
 ## [1.7.0] - 2026-08-28
 

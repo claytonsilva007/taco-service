@@ -177,6 +177,17 @@ def test_filtro_por_base_e_preparo():
     assert all(f["description"].lower().startswith("arroz") for f in body["foods"])
 
 
+def test_ovo_cozido_expoe_preparation():
+    response = client.get("/foods/488")
+    assert response.status_code == 200
+    assert response.json()["preparation"] == "cozido"
+
+
+def test_almondegas_expoem_preparation_plural():
+    assert client.get("/foods/330").json()["preparation"] == "cru"
+    assert client.get("/foods/331").json()["preparation"] == "frito"
+
+
 def test_filtro_por_base_ignora_acentos():
     com = client.get("/foods", params={"base_name": "feijão"}).json()["total"]
     sem = client.get("/foods", params={"base_name": "feijao"}).json()["total"]

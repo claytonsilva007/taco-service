@@ -35,6 +35,9 @@ def test_facetar_descricao():
     assert facetar_descricao("Arroz, tipo 1, cru")[1] == "cru"
     # Sem preparo declarado e sem qualificadores.
     assert facetar_descricao("Acarajé") == ("Acarajé", None, None)
+    assert facetar_descricao("Ovo, de galinha, inteiro, cozido/10minutos")[1] == "cozido"
+    assert facetar_descricao("Carne, bovina, almôndegas, cruas")[1] == "cru"
+    assert facetar_descricao("Carne, bovina, almôndegas, fritas")[1] == "frito"
     # Vários qualificadores preservam a ordem original.
     assert facetar_descricao("Carne, bovina, acém, moída, crua") == (
         "Carne",

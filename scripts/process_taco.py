@@ -56,16 +56,22 @@ CATEGORIAS_PLANILHA = [
 PREPAROS = {
     "cru": "cru",
     "crua": "cru",
+    "cruas": "cru",
     "cozido": "cozido",
     "cozida": "cozido",
+    "cozidos": "cozido",
+    "cozidas": "cozido",
     "pré-cozido": "cozido",
     "pré-cozida": "cozido",
     "frito": "frito",
     "frita": "frito",
+    "fritas": "frito",
     "assado": "assado",
     "assada": "assado",
+    "assadas": "assado",
     "grelhado": "grelhado",
     "grelhada": "grelhado",
+    "grelhadas": "grelhado",
     "refogado": "refogado",
     "refogada": "refogado",
     "torrado": "torrado",
@@ -89,7 +95,7 @@ def facetar_descricao(descricao: str) -> tuple[str, str | None, str | None]:
     preparo = None
     qualificadores = []
     for termo in resto:
-        canonico = PREPAROS.get(termo.lower())
+        canonico = PREPAROS.get(termo.lower().split("/", 1)[0].strip())
         if canonico is not None and preparo is None:
             preparo = canonico
         else:
