@@ -3,6 +3,14 @@
 Este arquivo segue o formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e o projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.9.0] - 2026-09-22
+
+### Adicionado
+
+- O CSV da POF passa a incluir `preparacao_normalizada`, com vocabulário
+  fechado para consultas por preparo, e `medida_caseira`, que distingue
+  medidas culinárias das conversões de grama, quilo, mililitro e litro.
+
 ## [1.8.0] - 2026-09-22
 
 ### Adicionado

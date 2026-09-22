@@ -52,6 +52,34 @@ COLUNAS_NUMERICAS = [
     "codigo_fonte",
 ]
 
+PREPARACOES_NORMALIZADAS = {
+    "NAO SE APLICA": "",
+    "CROZIDO(A)": "cozido",
+    "FRITO(A)": "frito",
+    "ASSADO(A)": "assado",
+    "REFOGADO(A)": "refogado",
+    "CRU(A)": "cru",
+    "GRELHADO(A)/BRASA/CHURRASCO": "grelhado",
+    "ENSOPADO": "ensopado",
+    "MOLHO VERMELHO": "molho vermelho",
+    "EMPANADO(A)/A MILANESA": "empanado",
+    "MOLHO BRANCO": "molho branco",
+    "SOPA": "sopa",
+    "AO VINAGRETE": "vinagrete",
+    "AO ALHO E OLEO": "alho e oleo",
+    "COM MANTEIGA/OLEO": "manteiga ou oleo",
+    "MINGAU": "mingau",
+}
+MEDIDAS_NAO_CASEIRAS = frozenset({"GRAMA", "QUILO", "MILILITRO", "LITRO"})
+
+
+def normalizar_preparacoes(series: pd.Series) -> pd.Series:
+    valores = series.astype("string").str.strip()
+    desconhecidos = sorted(set(valores.dropna()) - PREPARACOES_NORMALIZADAS.keys())
+    if desconhecidos:
+        raise ValueError(f"Preparações não mapeadas na POF: {desconhecidos}")
+    return valores.map(PREPARACOES_NORMALIZADAS).fillna("").astype("string")
+
 
 def processar(caminho_xls: Path, saida_dir: Path) -> pd.DataFrame:
     """Lê a planilha da POF, descarta o rodapé e exporta o CSV normalizado."""
@@ -67,6 +95,10 @@ def processar(caminho_xls: Path, saida_dir: Path) -> pd.DataFrame:
         df[col] = pd.to_numeric(df[col], errors="coerce")
     for col in ("codigo_alimento", "codigo_preparacao", "codigo_medida"):
         df[col] = df[col].astype(int)
+
+    df["preparacao_normalizada"] = normalizar_preparacoes(df["descricao_preparacao"])
+    medidas = df["descricao_medida"].astype("string").str.strip()
+    df["medida_caseira"] = ~medidas.isin(MEDIDAS_NAO_CASEIRAS)
 
     saida_csv = saida_dir / ARQUIVO_SAIDA
     df.to_csv(saida_csv, index=False, encoding="utf-8", lineterminator="\n")

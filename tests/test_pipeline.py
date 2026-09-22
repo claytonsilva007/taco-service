@@ -6,6 +6,7 @@ import pytest
 from scripts.build_sqlite import TABELAS, construir
 from scripts.process_pof import ARQUIVO_SAIDA as POF_ARQUIVO
 from scripts.process_pof import ENTRADA_PADRAO as POF_ENTRADA
+from scripts.process_pof import MEDIDAS_NAO_CASEIRAS, PREPARACOES_NORMALIZADAS
 from scripts.process_pof import SAIDA_PADRAO as POF_SAIDA
 from scripts.process_pof import main as pof_main
 from scripts.process_taco import ENTRADA_PADRAO, SAIDA_PADRAO, facetar_descricao, main
@@ -58,6 +59,20 @@ def test_pof_descarta_rodape_da_planilha():
     df = pd.read_csv(POF_SAIDA / POF_ARQUIVO)
     assert len(df) == 11801
     assert df["codigo_alimento"].astype(str).str.fullmatch(r"\d{7}").all()
+
+
+def test_pof_normaliza_preparacoes_sem_crozido():
+    df = pd.read_csv(POF_SAIDA / POF_ARQUIVO)
+    preparacoes = df["preparacao_normalizada"].fillna("")
+    assert set(preparacoes) <= set(PREPARACOES_NORMALIZADAS.values())
+    assert "crozido" not in set(preparacoes)
+    assert (preparacoes == "cozido").sum() >= 1232
+
+
+def test_pof_marca_medidas_caseiras_e_preserva_conversoes():
+    df = pd.read_csv(POF_SAIDA / POF_ARQUIVO)
+    assert set(df.loc[~df["medida_caseira"], "descricao_medida"]) <= MEDIDAS_NAO_CASEIRAS
+    assert set(df.loc[~df["medida_caseira"], "quantidade_g"]) <= {1.0, 1000.0}
 
 
 def test_pof_entrada_inexistente_retorna_erro(tmp_path):
