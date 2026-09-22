@@ -17,7 +17,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, create_model
 
-API_VERSION = "1.7.0"
+API_VERSION = "1.8.0"
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "processed" / "taco"
 POF_DIR = Path(__file__).resolve().parent.parent / "data" / "processed" / "pof"
@@ -496,12 +496,14 @@ def list_foods(
     if preparation:
         filtered = filtered[filtered["preparation"] == _fold(preparation)]
     total = len(filtered)
-    page = filtered.iloc[skip : skip + limit][["id", "category", "description"]]
+    page = filtered.iloc[skip : skip + limit][
+        ["id", "category", "description", "base_name", "preparation"]
+    ]
     return {
         "total": total,
         "skip": skip,
         "limit": limit,
-        "foods": page.to_dict(orient="records"),
+        "foods": [_row_to_dict(row) for _, row in page.iterrows()],
     }
 
 

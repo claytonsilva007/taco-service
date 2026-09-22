@@ -50,6 +50,10 @@ Os sete preparos reconhecidos e sua cobertura: `cru` (228), `cozido` (57),
 Os 233 alimentos restantes não declaram preparo na descrição e ficam com
 `preparo` vazio.
 
+O endpoint `GET /foods` devolve `base_name` e `preparation` junto com cada
+resultado da busca. Esses campos podem ser nulos quando a linha não declara a
+faceta correspondente.
+
 ## `taco_composicao.csv` (597 alimentos)
 
 Composição centesimal, minerais e vitaminas. A coluna "Campo na API" indica o nome

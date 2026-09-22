@@ -68,6 +68,12 @@ def test_list_foods_search():
     assert all("arroz" in f["description"].lower() for f in body["foods"])
 
 
+def test_list_foods_search_exposes_base_name_and_preparation():
+    resp = client.get("/foods", params={"search": "arroz", "limit": 100})
+    assert resp.status_code == 200
+    assert all("base_name" in food and "preparation" in food for food in resp.json()["foods"])
+
+
 def test_list_foods_search_regex_chars_are_literal():
     # Caracteres especiais de regex não devem quebrar a busca.
     resp = client.get("/foods", params={"search": "(arroz"})
