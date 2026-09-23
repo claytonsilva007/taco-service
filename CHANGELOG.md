@@ -3,6 +3,17 @@
 Este arquivo segue o formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e o projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [Não publicado]
+
+### Adicionado
+
+- `scripts/relatorio_lanches_prontos.py`: relatório somente-leitura (texto e
+  JSON) dos lanches prontos da POF — sanduíches, hambúrguer (sanduíche),
+  cheesburguer, bauru, misto, coxinha, pastel, esfirra, pizza — com o peso da
+  medida `UNIDADE` e se a TACO tem composição do mesmo alimento. Aceita o JSON
+  do relatório de demanda do tryvon-server (`--demanda`) para priorizar a fila.
+  Não grava nada e não cria crosswalk POF↔TACO.
+
 ## [1.9.0] - 2026-09-22
 
 ### Adicionado
