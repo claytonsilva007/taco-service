@@ -165,7 +165,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pof", type=Path, default=POF_PADRAO)
     parser.add_argument("--taco", type=Path, default=TACO_PADRAO)
     parser.add_argument(
-        "--demanda", type=Path, default=None,
+        "--demanda",
+        type=Path,
+        default=None,
         help="JSON do relatorio_curadoria_nutricional do tryvon-server.",
     )
     parser.add_argument("--formato", choices=("texto", "json", "ambos"), default="ambos")
